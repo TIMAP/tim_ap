@@ -9,4 +9,6 @@ public interface MemberDao {
     //public void insertMember(MemberEntity member);
     //public void updateMember(MemberEntity member);
     //public void deleteMember(MemberEntity member);
+
+	public MemberEntity getMember(int id);
 }

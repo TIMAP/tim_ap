@@ -24,5 +24,15 @@ public class MemberService implements MemberDao {
 
 		return result;
 	}
+	
+	@Override
+	public MemberEntity getMember(int id){
+		MemberEntity result = new MemberEntity();
+		MemberMapper memberMapper = sqlSession.getMapper(MemberMapper.class);
+		
+		result = memberMapper.getMember(id);
+		
+		return result;
+	}
 
 }

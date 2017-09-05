@@ -3,6 +3,8 @@ package com.tim.ap.controller;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import com.tim.ap.entity.MemberEntity;
 import com.tim.ap.service.MemberService;
 
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/ap/member")
 public class MemberController {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
@@ -37,13 +39,42 @@ public class MemberController {
 		return result;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginForm() {
-		return "/member/login";
+	@RequestMapping("/loginform")
+	public ModelAndView loginForm(Locale locale) {
+		logger.info("/member/login", locale);
+		ModelAndView result = new ModelAndView();
+		
+		
+		
+		result.setViewName("/member/login");
+		return result;
+	}
+	@RequestMapping(value="/login" , method=RequestMethod.POST)
+	public ModelAndView login(Locale locale, MemberEntity member,HttpSession session) {
+		logger.info("/member/login", locale);
+		ModelAndView result = new ModelAndView();
+		if(member.getId()==1&&member.getPw().equals("1")){
+			result.setViewName("/audio/list");
+		}else {
+			result.setViewName("/member/login");
+		}
+		MemberEntity mem = memberService.getMember(member.getId());
+		
+		session.setAttribute("id", member.getId());
+		result.addObject("fname", mem.getName_first());
+		result.addObject("name", mem.getName_last());
+		result.addObject("email", mem.getEmail());
+		
+		//여기서 아이디 받아서 로그인하고 오디오 리스트페이지로
+		
+		return result;
 	}
 
-	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String joinForm() {
-		return "/member/join";
+	@RequestMapping("/join")
+	public ModelAndView joinForm() {
+		ModelAndView result = new ModelAndView();
+		
+		result.setViewName("/member/join");
+		return result;
 	}
 }
